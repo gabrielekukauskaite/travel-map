@@ -1,6 +1,9 @@
 import type { Map } from "mapbox-gl";
 
-const addSource = (map: Map, data: FeatureCollection) => {
+const addSource = (map: Map, data: GeoJSON.FeatureCollection) => {
+  if (map.getSource("photos")) {
+    return;
+  }
   map.addSource("photos", {
     type: "geojson",
     data,

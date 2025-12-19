@@ -25,23 +25,6 @@ export const onPhotoUpload = onObjectFinalized(async (object) => {
   try {
     const { latitude, longitude, DateTimeOriginal } = await parse(buffer);
 
-    // Not sure if thumbnail is needed for now, commenting out
-    // // create thumbnail buffer (webp)
-    // const thumbBuffer = await sharp(buffer)
-    //   .resize({ width: 800, withoutEnlargement: true })
-    //   .toFormat("webp", { quality: 80 })
-    //   .toBuffer();
-
-    // // upload thumbnail to bucket
-    // const thumbPath = filePath.replace(/\.[^/.]+$/, "_thumb.webp");
-    // const thumbFile = bucket.file(thumbPath);
-    // await thumbFile.save(thumbBuffer);
-
-    // await thumbFile.makePublic();
-    // const thumbUrl = thumbFile.publicUrl();
-
-    // console.log("Thumbnail created at", thumbUrl);
-
     await file.makePublic();
     const url = file.publicUrl();
 
@@ -55,6 +38,7 @@ export const onPhotoUpload = onObjectFinalized(async (object) => {
         lat: latitude,
         lng: longitude,
         date: DateTimeOriginal ? DateTimeOriginal.toISOString() : null,
+        sortOrder: 0,
       });
 
     console.log(`Metadata saved for: ${fileName}`);

@@ -1,0 +1,61 @@
+#root {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 20px;
+  /* background-image: url("woodwallpaper.jpg"); */
+
+  --continent-stroke: #8b7355;
+}
+
+figure {
+  width: 545px;
+  height: 500px;
+  margin: 1em auto;
+}
+
+.outerBevel {
+  /* of frame */
+  box-shadow: 4px 6px 12px 0 black;
+  border-width: 5px;
+  border-style: solid;
+  border-color: rgb(109, 84, 58) rgb(24, 19, 13) rgb(24, 19, 13)
+    rgb(109, 84, 58);
+}
+
+.flatSurface {
+  /* of frame */
+  border: 12px solid rgb(65, 40, 16);
+}
+
+.innerBevel {
+  /* of frame */
+  border-width: 5px;
+  border-style: solid;
+  border-color: rgb(24, 19, 13) rgb(109, 84, 58) rgb(109, 84, 58)
+    rgb(24, 19, 13);
+}
+
+.map {
+  background-color: rgb(255, 249, 224); /* Mat color */
+  border-width: 3px; /* Gold edge of mat */
+  border-style: solid;
+  border-color: rgb(207, 166, 0) rgb(207, 166, 0) rgb(145, 110, 0)
+    rgb(145, 110, 0);
+}
+
+/* Custom amber shades for book pages */
+.bg-amber-75 {
+  background-color: rgb(252, 246, 232);
+}
+
+/* 3D transform utilities */
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
