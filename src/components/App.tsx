@@ -140,7 +140,7 @@ function App() {
           </div>
         </div>
 
-        <div className="absolute bottom-12 left-12 z-50">
+        <div className="absolute bottom-15 left-15 z-50">
           <ZoomControls />
         </div>
 

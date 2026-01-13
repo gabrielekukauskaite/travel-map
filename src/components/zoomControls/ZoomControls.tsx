@@ -1,6 +1,7 @@
 import { useRef } from "react";
-import EarthIcon from "./EarthIcon";
-import ParchmentBackground from "./ParchmentBackground";
+import Background from "./Background";
+import Label from "./Label";
+import EarthSVG from "./EarthSVG";
 
 const CONTINENT_COORDS: Record<string, [number, number, number]> = {
   africa: [10, -8, 3],
@@ -35,31 +36,36 @@ export default function EarthButton() {
 
   const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
     const continentGroup = (e.target as SVGElement).closest("g");
-    if (!continentGroup) return;
+    if (!continentGroup) {
+      svgRef.current?.querySelectorAll("g").forEach((g) => {
+        if (g !== continentGroup) g.style.filter = "";
+      });
+    }
 
-    continentGroup.style.fill = "#FFD700";
+    continentGroup.style.filter = "brightness(1.2)";
     svgRef.current?.querySelectorAll("g").forEach((g) => {
-      if (g !== continentGroup) g.style.fill = "";
+      if (g !== continentGroup) g.style.filter = "";
     });
   };
 
   const handleMouseLeave = () => {
-    svgRef.current?.querySelectorAll("g").forEach((g) => (g.style.fill = ""));
+    svgRef.current?.querySelectorAll("g").forEach((g) => (g.style.filter = ""));
   };
 
   return (
-    <ParchmentBackground>
-      <EarthIcon
+    <Background>
+      <Label />
+
+      <EarthSVG
         ref={svgRef}
         onClick={handleClick}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{
           width: "100%",
-          cursor: "pointer",
           filter: "sepia(0.15) contrast(1.05)",
         }}
       />
-    </ParchmentBackground>
+    </Background>
   );
 }
