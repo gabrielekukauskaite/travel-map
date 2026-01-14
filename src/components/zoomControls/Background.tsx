@@ -7,11 +7,11 @@ const Background = ({ children }: PropsWithChildren) => {
         width: "350px",
         height: "260px",
         position: "relative",
-        border: "6px solid",
-        borderImage:
-          "repeating-linear-gradient(45deg, #3d2817 0px, #3d2817 8px, #6b5438 8px, #6b5438 16px, #3d2817 16px, #3d2817 24px) 6",
+        border: "1px solid",
+        // borderImage:
+        //   "repeating-linear-gradient(45deg, #3d2817 0px, #3d2817 8px, #6b5438 8px, #6b5438 16px, #3d2817 16px, #3d2817 24px) 6",
         background: "#f5f1e8",
-        boxShadow: "inset 0 0 0 1px #8b6f47, 0 4px 12px rgba(0,0,0,0.15)",
+        boxShadow: "0 0 15px rgba(0,0,0,0.3)",
       }}
     >
       {/* Parchment background with gradient */}
