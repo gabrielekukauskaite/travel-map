@@ -2,38 +2,113 @@ const Nameplate = () => {
   return (
     <div className="absolute top-15 left-1/2 -translate-x-1/2 z-20">
       <div className="relative">
-        {/* Plaque shadow and depth */}
-        <div className="absolute inset-0 bg-gradient-to-b from-amber-900 to-amber-950 rounded-sm transform translate-y-1 blur-sm opacity-60"></div>
+        {/* Cartouche shadow */}
+        <div
+          className="absolute inset-0 transform translate-y-2 blur-md opacity-40"
+          style={{
+            background:
+              "linear-gradient(180deg, #f5ead4 0%, #f0e8d4 50%, #e8ddc4 100%)",
+            borderRadius: "30px",
+          }}
+        />
 
-        {/* Main plaque */}
-        <div className="relative bg-gradient-to-b from-amber-700 via-amber-600 to-amber-800 px-8 py-3 rounded-sm shadow-2xl border-2 border-amber-900">
-          {/* Inner bevel effect */}
-          <div className="absolute inset-1 border border-amber-500 rounded-sm opacity-30 pointer-events-none"></div>
+        {/* Main cartouche banner */}
+        <div
+          className="relative"
+          style={{
+            width: "500px",
+            height: "85px",
+            background:
+              "linear-gradient(180deg, #f5ead4 0%, #f0e8d4 50%, #e8ddc4 100%)",
+            border: "2px solid #6b5438",
+            borderRadius: "25px",
+            opacity: 0.95,
+            filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.3))",
+            padding: "8px",
+          }}
+        >
+          {/* Inner border decoration */}
+          <div
+            style={{
+              position: "absolute",
+              top: "8px",
+              left: "8px",
+              right: "8px",
+              bottom: "8px",
+              border: "0.8px solid #8b6f47",
+              borderRadius: "20px",
+              opacity: 0.4,
+              pointerEvents: "none",
+            }}
+          />
 
-          {/* Brushed metal texture overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/20 to-transparent rounded-sm pointer-events-none"></div>
-
-          {/* Mounting screws */}
-          <div className="absolute -top-1 -left-1 w-2 h-2 rounded-full bg-amber-900 border border-amber-950 shadow-inner"></div>
-          <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-900 border border-amber-950 shadow-inner"></div>
-          <div className="absolute -bottom-1 -left-1 w-2 h-2 rounded-full bg-amber-900 border border-amber-950 shadow-inner"></div>
-          <div className="absolute -bottom-1 -right-1 w-2 h-2 rounded-full bg-amber-900 border border-amber-950 shadow-inner"></div>
+          {/* Decorative corner elements */}
+          <div
+            style={{
+              position: "absolute",
+              top: "8px",
+              left: "8px",
+              width: "5px",
+              height: "5px",
+              borderRadius: "50%",
+              background: "#8b6f47",
+              opacity: 0.5,
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              top: "8px",
+              right: "8px",
+              width: "5px",
+              height: "5px",
+              borderRadius: "50%",
+              background: "#8b6f47",
+              opacity: 0.5,
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              bottom: "8px",
+              left: "8px",
+              width: "5px",
+              height: "5px",
+              borderRadius: "50%",
+              background: "#8b6f47",
+              opacity: 0.5,
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              bottom: "8px",
+              right: "8px",
+              width: "5px",
+              height: "5px",
+              borderRadius: "50%",
+              background: "#8b6f47",
+              opacity: 0.5,
+            }}
+          />
 
           {/* Text content */}
-          <div className="relative text-center">
+          <div className="relative text-center p-[5px]">
             <h1
-              className="text-amber-950 font-serif text-lg font-bold tracking-wide mb-0.5"
+              className="font-serif text-xl font-semibold tracking-wider mb-1"
               style={{
-                textShadow:
-                  "0 1px 0 rgba(255, 223, 136, 0.5), 0 -1px 0 rgba(0, 0, 0, 0.3)",
+                color: "#3d2817",
+                textShadow: "0 1px 1px rgba(255, 255, 255, 0.5)",
+                fontVariant: "small-caps",
               }}
             >
               Gabriele's Travel Chronicles
             </h1>
             <p
-              className="text-amber-900 font-serif text-xs italic"
+              className="font-serif text-sm italic"
               style={{
-                textShadow: "0 1px 0 rgba(255, 223, 136, 0.3)",
+                color: "#6b5438",
+                textShadow: "0 0.5px 0.5px rgba(255, 255, 255, 0.3)",
               }}
             >
               Postcards from Around the World
