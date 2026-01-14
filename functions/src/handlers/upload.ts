@@ -1,6 +1,8 @@
 import { onObjectFinalized } from "firebase-functions/storage";
 import { db, storage } from "../init";
-import { parse } from "exifr";
+import { exiftool } from "exiftool-vendored";
+import path from "path";
+import os from "os";
 
 export const onPhotoUpload = onObjectFinalized(async (object) => {
   const filePath = object.data.name;
@@ -20,10 +22,12 @@ export const onPhotoUpload = onObjectFinalized(async (object) => {
     return null;
   }
 
-  const [buffer] = await file.download();
+  const tempFilePath = path.join(os.tmpdir(), fileName);
+  await file.download({ destination: tempFilePath });
 
   try {
-    const { latitude, longitude, DateTimeOriginal } = await parse(buffer);
+    const { GPSLatitude, GPSLongitude, DateTimeOriginal } =
+      await exiftool.read(tempFilePath);
 
     await file.makePublic();
     const url = file.publicUrl();
@@ -35,9 +39,9 @@ export const onPhotoUpload = onObjectFinalized(async (object) => {
         url,
         title: "",
         description: "",
-        lat: latitude,
-        lng: longitude,
-        date: DateTimeOriginal ? DateTimeOriginal.toISOString() : null,
+        lat: GPSLatitude,
+        lng: GPSLongitude,
+        date: DateTimeOriginal ? DateTimeOriginal.toString() : null,
         sortOrder: 0,
       });
 
