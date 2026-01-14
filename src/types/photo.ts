@@ -1,6 +1,6 @@
 export interface Photo {
   id: string;
-  data: string;
+  date: string;
   description: string;
   lat: number;
   lng: number;

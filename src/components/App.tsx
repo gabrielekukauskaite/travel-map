@@ -47,7 +47,9 @@ function App() {
       mapRef.current = new Map({
         container: mapContainerRef.current,
         style: MAPBOX_STYLE,
-        zoom: 1,
+        center: [10, 50], // Europe (longitude, latitude)
+        zoom: 4,
+        minZoom: 3,
       });
 
       mapRef.current.on("load", async () => {
@@ -77,6 +79,15 @@ function App() {
           if (features && features.length > 0) {
             console.log("Setting active feature:", features[0]);
             setActiveFeature(features[0]);
+
+            // Zoom to the photo location with left offset
+            const coords = (features[0].geometry as any).coordinates;
+            mapRef.current?.easeTo({
+              center: coords,
+              zoom: 12,
+              offset: [-250, 0],
+              duration: 800,
+            });
           }
         });
 
@@ -100,15 +111,33 @@ function App() {
           ) as mapboxgl.GeoJSONSource;
           if (!source) return;
 
-          source.getClusterExpansionZoom(clusterId, (err, zoom) => {
-            if (err || zoom == null) return;
+          // Get the first photo from the cluster and open it
+          source.getClusterLeaves(clusterId, 1, 0, (err, clusterFeatures) => {
+            if (err || !clusterFeatures || clusterFeatures.length === 0) return;
 
+            setActiveFeature(clusterFeatures[0] as GeoJSONFeature);
+
+            // Zoom to the photo location with left offset
+            const coords = (clusterFeatures[0].geometry as any).coordinates;
             mapRef.current?.easeTo({
-              center: (features[0].geometry as any).coordinates,
-              zoom,
-              duration: 500,
+              center: coords,
+              zoom: 12,
+              offset: [-250, 0],
+              duration: 10000,
             });
           });
+
+          // Also expand the cluster
+          // source.getClusterExpansionZoom(clusterId, (err, zoom) => {
+          //   if (err || zoom == null) return;
+
+          //   // Don't expand cluster since we're already zooming to the photo
+          //   // mapRef.current?.easeTo({
+          //   //   center: (features[0].geometry as any).coordinates,
+          //   //   zoom,
+          //   //   duration: 500,
+          //   // });
+          // });
         });
 
         // Optional: Change cursor to pointer when hovering over clusters

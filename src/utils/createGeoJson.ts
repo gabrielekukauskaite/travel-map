@@ -11,6 +11,7 @@ export const createGeoJson = (data: Photo[]): GeoJSON.FeatureCollection => ({
     properties: {
       id: p.id,
       title: p.title || "",
+      date: p.date || "",
       url: p.url || "",
       thumbUrl: p.thumbUrl || p.url || "",
     },
