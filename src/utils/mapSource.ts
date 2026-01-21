@@ -9,7 +9,7 @@ const addSource = (map: Map, data: GeoJSON.FeatureCollection) => {
     data,
     cluster: true,
     clusterMaxZoom: 14,
-    clusterRadius: 70,
+    clusterRadius: 40,
     clusterProperties: {
       firstPhotoId: ["coalesce", ["get", "id"], ""],
       firstPhotoThumbUrl: ["coalesce", ["get", "thumbUrl"], ""],

@@ -48,27 +48,40 @@ const Postcard = ({ feature, onClose }: PostcardProps) => {
       style={{
         width: `${imageDimensions.width}px`,
         height: `${imageDimensions.height}px`,
-        boxShadow: "0 0 15px rgba(0,0,0,0.3)",
+        boxShadow: "0 0 15px var(--shadow-dark)",
       }}
     >
       <button
         onClick={onClose}
-        className="absolute top-2 right-2 w-8 h-8 bg-white hover:bg-gray-100 text-red-600 font-bold rounded border-2 border-red-600 z-20"
+        className="absolute top-2 right-2 w-7 h-7 m-2 rounded-full border flex items-center justify-center z-20 cursor-pointer transition-colors duration-200"
+        style={{
+          background:
+            "linear-gradient(to top, var(--parchment-overlay-1) 0%, var(--parchment-overlay-2) 100%)",
+          borderColor: "var(--brown-light)",
+          color: "var(--brown-light)",
+          fontSize: "18px",
+        }}
+        onMouseEnter={(e) =>
+          (e.currentTarget.style.background =
+            "linear-gradient(to top, var(--parchment-overlay-hover-1) 0%, var(--parchment-overlay-hover-2) 100%)")
+        }
+        onMouseLeave={(e) =>
+          (e.currentTarget.style.background = "var(--parchment-light)")
+        }
       >
-        ✕
+        ×
       </button>
 
       {/* Outer black border */}
       <div
-        style={{
-          border: "1px solid #000",
-          padding: "5px",
-          background: "#f5f1e8",
-          position: "relative",
-        }}
+        className="border border-black p-1.5 relative"
+        style={{ background: "var(--background-light)" }}
       >
         {/* Inner border */}
-        <div style={{ border: "1px solid #8b6f47", position: "relative" }}>
+        <div
+          className="relative"
+          style={{ border: "1px solid var(--brown-light)" }}
+        >
           <img
             ref={imgRef}
             src={url}
@@ -79,48 +92,34 @@ const Postcard = ({ feature, onClose }: PostcardProps) => {
 
           {/* Collapsible info overlay */}
           <div
-            className="absolute bottom-0 left-0 right-0"
+            className="absolute bottom-0 left-0 right-0 overflow-hidden cursor-default transition-all duration-300"
             onMouseEnter={() => setIsExpanded(true)}
             onMouseLeave={() => setIsExpanded(false)}
             style={{
               background:
-                "linear-gradient(to top, rgba(245, 232, 212, 0.95) 0%, rgba(245, 232, 212, 0.85) 100%)",
-              borderTop: "1px solid rgba(139, 111, 71, 0.5)",
-              transition: "all 0.3s ease-in-out",
+                "linear-gradient(to top, var(--parchment-overlay-1) 0%, var(--parchment-overlay-2) 100%)",
+              borderTop: "1px solid var(--gold-border-light)",
               maxHeight: isExpanded ? "400px" : "50px",
-              overflow: "hidden",
-              cursor: "default",
             }}
           >
             {/* Title - always visible */}
-            <div
-              style={{
-                padding: "12px 16px",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
+            <div className="py-3 px-4 flex justify-between items-center">
               <h3
-                className="text-lg font-bold truncate"
+                className="text-lg font-bold truncate flex-1"
                 style={{
-                  color: "#3d2817",
+                  color: "var(--brown-dark)",
                   fontFamily: "Garamond, Georgia, serif",
-                  textShadow: "0 1px 2px rgba(255,255,255,0.8)",
-                  flex: 1,
+                  textShadow: "0 1px 2px var(--white-highlight-strong)",
                 }}
               >
                 {title || PLACEHOLDER_TITLE}
               </h3>
               {date && (
                 <div
-                  className="text-sm"
+                  className="text-sm italic ml-3 whitespace-nowrap"
                   style={{
-                    color: "#6b5438",
+                    color: "var(--brown-medium)",
                     fontFamily: "Garamond, Georgia, serif",
-                    fontStyle: "italic",
-                    marginLeft: "12px",
-                    whiteSpace: "nowrap",
                   }}
                 >
                   {new Date(date).toLocaleDateString()}
@@ -130,15 +129,14 @@ const Postcard = ({ feature, onClose }: PostcardProps) => {
 
             {/* Expandable content */}
             <div
+              className="px-4 pb-3 transition-opacity duration-300 delay-100"
               style={{
-                padding: "0 16px 12px 16px",
                 opacity: isExpanded ? 1 : 0,
-                transition: "opacity 0.3s ease-in-out 0.1s",
               }}
             >
               <p
                 className="font-serif leading-snug line-clamp-3"
-                style={{ color: "#3d2817" }}
+                style={{ color: "var(--brown-dark)" }}
               >
                 {description || PLACEHOLDER_DESCRIPTION}
               </p>

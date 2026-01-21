@@ -4,7 +4,10 @@ export interface Photo {
   description: string;
   lat: number;
   lng: number;
+  orientation: PhotoOrientation;
   thumbUrl: string;
   title: string;
   url: string;
 }
+
+export type PhotoOrientation = "landscape" | "portrait";

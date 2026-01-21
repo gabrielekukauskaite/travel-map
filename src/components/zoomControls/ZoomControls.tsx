@@ -1,7 +1,8 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Background from "./Background";
 import Label from "./Label";
-import EarthSVG from "./EarthSVG";
+import EarthIcon from "../icons/EarthIcon";
+import CompassIcon from "../icons/CompassIcon";
 
 const CONTINENT_COORDS: Record<string, [number, number, number]> = {
   africa: [10, -8, 3],
@@ -14,6 +15,8 @@ const CONTINENT_COORDS: Record<string, [number, number, number]> = {
 
 export default function EarthButton() {
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
   const navigateToContinent = (continentId: string) => {
     const coords = CONTINENT_COORDS[continentId];
@@ -52,20 +55,110 @@ export default function EarthButton() {
     svgRef.current?.querySelectorAll("g").forEach((g) => (g.style.filter = ""));
   };
 
-  return (
-    <Background>
-      <Label />
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsClosing(false);
+      setIsExpanded(false);
+    }, 400);
+  };
 
-      <EarthSVG
-        ref={svgRef}
-        onClick={handleClick}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
+  const compassIcon = (
+    <div
+      onClick={isExpanded ? handleClose : () => setIsExpanded(true)}
+      style={{
+        width: "80px",
+        height: "80px",
+        cursor: "pointer",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        transition: "all 0.4s ease-in-out",
+      }}
+    >
+      <CompassIcon
         style={{
           width: "100%",
+          height: "100%",
           filter: "sepia(0.15) contrast(1.05)",
         }}
       />
-    </Background>
+    </div>
+  );
+
+  if (!isExpanded) {
+    return compassIcon;
+  }
+
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: "80px",
+        height: "80px",
+      }}
+    >
+      <style>{`
+        @keyframes expandIn {
+          from {
+            opacity: 0;
+            transform: scale(0.3);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        @keyframes collapseOut {
+          from {
+            opacity: 1;
+            transform: scale(1);
+          }
+          to {
+            opacity: 0;
+            transform: scale(0.3);
+          }
+        }
+      `}</style>
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          animation: isClosing
+            ? "collapseOut 0.4s ease-in-out forwards"
+            : "expandIn 0.4s ease-in-out",
+          transformOrigin: "bottom left",
+        }}
+      >
+        <Background>
+          <Label />
+
+          <EarthIcon
+            ref={svgRef}
+            onClick={handleClick}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={{
+              width: "100%",
+              filter: "sepia(0.15) contrast(1.05)",
+            }}
+          />
+        </Background>
+      </div>
+
+      {/* Compass icon in bottom left corner */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          zIndex: 10,
+        }}
+      >
+        {compassIcon}
+      </div>
+    </div>
   );
 }

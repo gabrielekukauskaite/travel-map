@@ -1,4 +1,5 @@
 import type { Map } from "mapbox-gl";
+import { getCSSVariable } from "./getCSSVariable";
 
 const addTransparentCirclesLayer = (map: Map) => {
   map.addLayer({
@@ -6,8 +7,10 @@ const addTransparentCirclesLayer = (map: Map) => {
     type: "circle",
     source: "photos",
     paint: {
-      "circle-color": "transparent",
-      "circle-radius": 20,
+      "circle-color": getCSSVariable("--brown-light"),
+      "circle-radius": 22,
+      "circle-stroke-width": 2,
+      "circle-stroke-color": getCSSVariable("--white"),
     },
   });
 };

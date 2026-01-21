@@ -1,0 +1,59 @@
+:root {
+  /* Browns/Tans - Vintage/Leather Theme */
+  --brown-light: #8b6f47;
+  --brown-medium: #6b5438;
+  --brown-dark: #3d2817;
+
+  /* Frame-specific browns */
+  --brown-frame-bevel: rgb(109, 84, 58);
+  --brown-frame-surface: rgb(65, 40, 16);
+  --brown-frame-shadow: rgb(24, 19, 13);
+
+  /* Beige/Cream/Parchment Tones */
+  --parchment-light: #f5ead4;
+  --parchment-mid: #f0e8d4;
+  --parchment-dark: #e8ddc4;
+  --background-light: #f5f1e8;
+  --page-1: #f4f1e8;
+  --page-2: #f7f4ec;
+  --page-3: #faf8f3;
+  --page-4: #fcfaf7;
+  --page-5: #fafaf8;
+  --amber-75: rgb(252, 246, 232);
+  --mat-color: rgb(255, 249, 224);
+
+  /* Parchment gradients with transparency */
+  --parchment-overlay-1: rgba(245, 232, 212, 0.95);
+  --parchment-overlay-2: rgba(245, 232, 212, 0.85);
+  --parchment-overlay-hover-1: rgba(232, 221, 196, 0.95);
+  --parchment-overlay-hover-2: rgba(232, 221, 196, 0.85);
+
+  /* Gold/Yellow */
+  --gold-primary: #d4af37;
+  --gold-edge: rgb(207, 166, 0);
+  --gold-dark: rgb(145, 110, 0);
+  --gold-border-translucent: rgba(207, 166, 0, 0.767);
+  --gold-border-light: rgba(139, 111, 71, 0.5);
+  --gold-inset: rgba(139, 69, 19, 0.1);
+  --gold-border-medium: rgba(139, 69, 19, 0.4);
+  --gold-border-dark: rgba(139, 69, 19, 0.5);
+
+  /* Blues - Map/Ocean Theme */
+  --blue-light: #d9e8f5;
+  --blue-medium: #a8c5dd;
+  --blue-dark: #7a9fb8;
+
+  /* Grays/Blacks/Whites */
+  --black: black;
+  --white: white;
+  --gray: gray;
+
+  /* Shadow/Overlay colors */
+  --shadow-light: rgba(0, 0, 0, 0.15);
+  --shadow-medium: rgba(0, 0, 0, 0.2);
+  --shadow-dark: rgba(0, 0, 0, 0.3);
+  --shadow-darker: rgba(0, 0, 0, 0.5);
+  --white-highlight: rgba(255, 255, 255, 0.3);
+  --white-highlight-medium: rgba(255, 255, 255, 0.5);
+  --white-highlight-strong: rgba(255, 255, 255, 0.8);
+}

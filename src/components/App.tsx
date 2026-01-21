@@ -14,13 +14,16 @@ import { updateFeatureThumbnail } from "../utils/updateFeatureThumbnail";
 import Nameplate from "./Nameplate";
 import ZoomControls from "./zoomControls/ZoomControls";
 import Postcard from "./Postcard";
+import { createPhotoPopupElement } from "./PhotoPopup";
+import type { Photo } from "../types/photo";
 
 const MAPBOX_ACCESS_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
-const MAPBOX_STYLE = "mapbox://styles/mapbox/outdoors-v12";
+const MAPBOX_CUSTOM_STYLE =
+  "mapbox://styles/gabrielek/cmkmplewn001d01r122doa7s3";
 
-function App() {
+const App = () => {
   const mapRef = useRef<Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -29,6 +32,9 @@ function App() {
   );
 
   const throttleTimeoutRef = useRef<number | null>(null);
+  const hoverPopupRef = useRef<mapboxgl.Popup | null>(null);
+  const currentHoverTargetRef = useRef<string | null>(null);
+  const closePopupTimeoutRef = useRef<number | null>(null);
 
   const throttledUpdate = () => {
     if (throttleTimeoutRef.current) {
@@ -46,8 +52,8 @@ function App() {
     if (mapContainerRef.current) {
       mapRef.current = new Map({
         container: mapContainerRef.current,
-        style: MAPBOX_STYLE,
-        center: [10, 50], // Europe (longitude, latitude)
+        style: MAPBOX_CUSTOM_STYLE,
+        center: [-85, 12], // Central America (longitude, latitude)
         zoom: 4,
         minZoom: 3,
       });
@@ -75,28 +81,121 @@ function App() {
         // Add click handler for unclustered photos
         mapRef.current?.on("click", "unclustered-photos", (e) => {
           const features = e.features as GeoJSONFeature[];
-          console.log("Clicked unclustered photo:", features);
           if (features && features.length > 0) {
-            console.log("Setting active feature:", features[0]);
-            setActiveFeature(features[0]);
+            // setActiveFeature(features[0]);
 
             // Zoom to the photo location with left offset
             const coords = (features[0].geometry as any).coordinates;
             mapRef.current?.easeTo({
               center: coords,
               zoom: 12,
-              offset: [-250, 0],
               duration: 800,
             });
           }
         });
 
-        // Change cursor to pointer when hovering over unclustered photos
-        mapRef.current?.on("mouseenter", "unclustered-photos", () => {
+        const showPhotoPopup = (e: any) => {
+          const features = e.features as GeoJSONFeature[];
+          if (!features?.length) return;
+
+          const feature = features[0];
+          const coords = (feature.geometry as any).coordinates.slice();
+          const clusterId = feature.properties?.cluster_id;
+          const targetId =
+            clusterId || feature.properties?.id || coords.join(",");
+
+          // If we're already hovering this exact target, do nothing
+          if (currentHoverTargetRef.current === targetId) return;
+
+          // Clear any pending close timeout when hovering a new marker
+          if (closePopupTimeoutRef.current) {
+            clearTimeout(closePopupTimeoutRef.current);
+            closePopupTimeoutRef.current = null;
+          }
+
+          // Update current hover target (this will cancel any pending async operations)
+          currentHoverTargetRef.current = targetId;
           mapRef.current?.getCanvas().style.setProperty("cursor", "pointer");
-        });
+
+          const displayPhoto = (photo: Photo) => {
+            // Only show if this is still the current target
+            if (currentHoverTargetRef.current !== targetId) return;
+
+            if (hoverPopupRef.current) hoverPopupRef.current.remove();
+
+            const popupElement = createPhotoPopupElement({ photo });
+            hoverPopupRef.current = new mapboxgl.Popup({
+              closeButton: false,
+              closeOnClick: false,
+              offset: 30,
+              className: "photo-hover-popup",
+              anchor: "bottom",
+              maxWidth: "1000px",
+            })
+              .setLngLat(coords)
+              .setDOMContent(popupElement)
+              .addTo(mapRef.current!);
+
+            // Add hover handlers to keep popup open
+            const popupContainer = hoverPopupRef.current.getElement();
+            popupContainer.addEventListener("mouseenter", () => {
+              if (closePopupTimeoutRef.current) {
+                clearTimeout(closePopupTimeoutRef.current);
+                closePopupTimeoutRef.current = null;
+              }
+            });
+            popupContainer.addEventListener("mouseleave", () => {
+              schedulePopupClose();
+            });
+          };
+
+          if (clusterId) {
+            const source = mapRef.current?.getSource(
+              "photos",
+            ) as mapboxgl.GeoJSONSource;
+            source?.getClusterLeaves(
+              clusterId,
+              1,
+              0,
+              (err, clusterFeatures) => {
+                if (!err && clusterFeatures?.length) {
+                  const photoData = clusterFeatures[0].properties as Photo;
+                  displayPhoto(photoData);
+                }
+              },
+            );
+          } else {
+            const photoData = feature.properties as Photo;
+            displayPhoto(photoData);
+          }
+        };
+
+        const schedulePopupClose = () => {
+          if (closePopupTimeoutRef.current) {
+            clearTimeout(closePopupTimeoutRef.current);
+          }
+          closePopupTimeoutRef.current = window.setTimeout(() => {
+            currentHoverTargetRef.current = null;
+            mapRef.current?.getCanvas().style.setProperty("cursor", "");
+            if (hoverPopupRef.current) {
+              const popupElement = hoverPopupRef.current.getElement();
+              popupElement.classList.add("fade-out");
+              closePopupTimeoutRef.current = window.setTimeout(() => {
+                hoverPopupRef.current?.remove();
+                hoverPopupRef.current = null;
+                closePopupTimeoutRef.current = null;
+              }, 200);
+            }
+          }, 100);
+        };
+
+        mapRef.current?.on("mousemove", "unclustered-photos", showPhotoPopup);
         mapRef.current?.on("mouseleave", "unclustered-photos", () => {
-          mapRef.current?.getCanvas().style.setProperty("cursor", "");
+          schedulePopupClose();
+        });
+        mapRef.current?.on("mousemove", "cluster-photos", showPhotoPopup);
+        mapRef.current?.on("mouseleave", "cluster-photos", () => {
+          schedulePopupClose();
         });
 
         mapRef.current?.on("click", "cluster-photos", (e) => {
@@ -111,41 +210,16 @@ function App() {
           ) as mapboxgl.GeoJSONSource;
           if (!source) return;
 
-          // Get the first photo from the cluster and open it
-          source.getClusterLeaves(clusterId, 1, 0, (err, clusterFeatures) => {
-            if (err || !clusterFeatures || clusterFeatures.length === 0) return;
+          // Also expand the cluster
+          source.getClusterExpansionZoom(clusterId, (err, zoom) => {
+            if (err || zoom == null) return;
 
-            setActiveFeature(clusterFeatures[0] as GeoJSONFeature);
-
-            // Zoom to the photo location with left offset
-            const coords = (clusterFeatures[0].geometry as any).coordinates;
             mapRef.current?.easeTo({
-              center: coords,
-              zoom: 12,
-              offset: [-250, 0],
-              duration: 10000,
+              center: (features[0].geometry as any).coordinates,
+              zoom,
+              duration: 800,
             });
           });
-
-          // Also expand the cluster
-          // source.getClusterExpansionZoom(clusterId, (err, zoom) => {
-          //   if (err || zoom == null) return;
-
-          //   // Don't expand cluster since we're already zooming to the photo
-          //   // mapRef.current?.easeTo({
-          //   //   center: (features[0].geometry as any).coordinates,
-          //   //   zoom,
-          //   //   duration: 500,
-          //   // });
-          // });
-        });
-
-        // Optional: Change cursor to pointer when hovering over clusters
-        mapRef.current?.on("mouseenter", "cluster-photos", () => {
-          mapRef.current?.getCanvas().style.setProperty("cursor", "pointer");
-        });
-        mapRef.current?.on("mouseleave", "cluster-photos", () => {
-          mapRef.current?.getCanvas().style.setProperty("cursor", "");
         });
       });
     }
@@ -179,6 +253,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
 export default App;

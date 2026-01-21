@@ -1,4 +1,6 @@
-const EarthSVG = (props) => (
+import type { SVGProps } from "react";
+
+const EarthIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="30 0 400 210" {...props}>
     <g
       id="africa"
@@ -101,4 +103,4 @@ const EarthSVG = (props) => (
     </g>
   </svg>
 );
-export default EarthSVG;
+export default EarthIcon;

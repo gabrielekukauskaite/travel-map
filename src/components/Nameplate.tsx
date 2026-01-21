@@ -4,111 +4,46 @@ const Nameplate = () => {
       <div className="relative">
         {/* Cartouche shadow */}
         <div
-          className="absolute inset-0 transform translate-y-2 blur-md opacity-40"
+          className="absolute inset-0 translate-y-2 blur-md opacity-40 rounded-[30px]"
           style={{
             background:
-              "linear-gradient(180deg, #f5ead4 0%, #f0e8d4 50%, #e8ddc4 100%)",
-            borderRadius: "30px",
+              "linear-gradient(180deg, var(--parchment-light) 0%, var(--parchment-mid) 50%, var(--parchment-dark) 100%)",
           }}
         />
 
         {/* Main cartouche banner */}
         <div
-          className="relative"
+          className="relative w-[500px] h-[85px] border-2 border-[var(--brown-medium)] rounded-[25px] opacity-95 p-2"
           style={{
-            width: "500px",
-            height: "85px",
             background:
-              "linear-gradient(180deg, #f5ead4 0%, #f0e8d4 50%, #e8ddc4 100%)",
-            border: "2px solid #6b5438",
-            borderRadius: "25px",
-            opacity: 0.95,
-            filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.3))",
-            padding: "8px",
+              "linear-gradient(180deg, var(--parchment-light) 0%, var(--parchment-mid) 50%, var(--parchment-dark) 100%)",
+            filter: "drop-shadow(0 4px 8px var(--shadow-dark))",
           }}
         >
           {/* Inner border decoration */}
-          <div
-            style={{
-              position: "absolute",
-              top: "8px",
-              left: "8px",
-              right: "8px",
-              bottom: "8px",
-              border: "0.8px solid #8b6f47",
-              borderRadius: "20px",
-              opacity: 0.4,
-              pointerEvents: "none",
-            }}
-          />
+          <div className="absolute top-2 left-2 right-2 bottom-2 border-[0.8px] border-[var(--brown-light)] rounded-[20px] opacity-40 pointer-events-none" />
 
           {/* Decorative corner elements */}
-          <div
-            style={{
-              position: "absolute",
-              top: "8px",
-              left: "8px",
-              width: "5px",
-              height: "5px",
-              borderRadius: "50%",
-              background: "#8b6f47",
-              opacity: 0.5,
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              top: "8px",
-              right: "8px",
-              width: "5px",
-              height: "5px",
-              borderRadius: "50%",
-              background: "#8b6f47",
-              opacity: 0.5,
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              bottom: "8px",
-              left: "8px",
-              width: "5px",
-              height: "5px",
-              borderRadius: "50%",
-              background: "#8b6f47",
-              opacity: 0.5,
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              bottom: "8px",
-              right: "8px",
-              width: "5px",
-              height: "5px",
-              borderRadius: "50%",
-              background: "#8b6f47",
-              opacity: 0.5,
-            }}
-          />
+          <div className="absolute top-2 left-2 w-[5px] h-[5px] rounded-full bg-[var(--brown-light)] opacity-50" />
+          <div className="absolute top-2 right-2 w-[5px] h-[5px] rounded-full bg-[var(--brown-light)] opacity-50" />
+          <div className="absolute bottom-2 left-2 w-[5px] h-[5px] rounded-full bg-[var(--brown-light)] opacity-50" />
+          <div className="absolute bottom-2 right-2 w-[5px] h-[5px] rounded-full bg-[var(--brown-light)] opacity-50" />
 
           {/* Text content */}
           <div className="relative text-center p-[5px]">
             <h1
-              className="font-serif text-xl font-semibold tracking-wider mb-1"
+              className="font-serif text-xl font-semibold tracking-wider mb-1 text-[var(--brown-dark)] small-caps"
               style={{
-                color: "#3d2817",
-                textShadow: "0 1px 1px rgba(255, 255, 255, 0.5)",
+                textShadow: "0 1px 1px var(--white-highlight-medium)",
                 fontVariant: "small-caps",
               }}
             >
               Gabriele's Travel Chronicles
             </h1>
             <p
-              className="font-serif text-sm italic"
+              className="font-serif text-sm italic text-[var(--brown-medium)]"
               style={{
-                color: "#6b5438",
-                textShadow: "0 0.5px 0.5px rgba(255, 255, 255, 0.3)",
+                textShadow: "0 0.5px 0.5px var(--white-highlight)",
               }}
             >
               Postcards from Around the World

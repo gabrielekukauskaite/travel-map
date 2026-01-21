@@ -3,51 +3,30 @@ import type { PropsWithChildren } from "react";
 const Background = ({ children }: PropsWithChildren) => {
   return (
     <div
+      className="w-[350px] h-[260px] relative border border-solid shadow-[0_0_15px_var(--shadow-dark)]"
       style={{
-        width: "350px",
-        height: "260px",
-        position: "relative",
-        border: "1px solid",
-        // borderImage:
-        //   "repeating-linear-gradient(45deg, #3d2817 0px, #3d2817 8px, #6b5438 8px, #6b5438 16px, #3d2817 16px, #3d2817 24px) 6",
-        background: "#f5f1e8",
-        boxShadow: "0 0 15px rgba(0,0,0,0.3)",
+        background: "var(--background-light)",
       }}
     >
       {/* Parchment background with gradient */}
       <div
+        className="absolute top-[5px] left-[5px] right-[5px] bottom-[5px] border border-[var(--brown-light)] contrast-[1.1] brightness-[0.98]"
         style={{
-          position: "absolute",
-          top: "5px",
-          left: "5px",
-          right: "5px",
-          bottom: "5px",
           background:
-            "radial-gradient(circle at 50% 50%, #d9e8f5 0%, #a8c5dd 50%, #7a9fb8 100%)",
+            "radial-gradient(circle at 50% 50%, var(--blue-light) 0%, var(--blue-medium) 50%, var(--blue-dark) 100%)",
           backgroundSize: "130% 130%",
           backgroundPosition: "center",
-          border: "1px solid var(--earth-button-stroke, #8b6f47)",
-          filter: "contrast(1.1) brightness(0.98)",
         }}
       >
         {/* Noise overlay */}
         <div
+          className="absolute inset-0 pointer-events-none z-0"
           style={{
-            position: "absolute",
-            inset: 0,
             backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.25'/%3E%3C/svg%3E")`,
-            pointerEvents: "none",
-            zIndex: 0,
           }}
         />
         {/* Grid lines container */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            zIndex: 1,
-          }}
-        >
+        <div className="absolute inset-0 z-[1]">
           {/* Horizontal lines */}
           {Array.from({ length: 9 }, (_, i) => (i + 1) * 10).map((topPct) => {
             // Calculate opacity: stronger at edges (0%, 100%), weaker at center (50%)
@@ -57,13 +36,9 @@ const Background = ({ children }: PropsWithChildren) => {
             return (
               <div
                 key={`h-${topPct}`}
+                className="absolute left-0 right-0 h-[0.5px] bg-[var(--brown-light)]"
                 style={{
-                  position: "absolute",
-                  left: 0,
-                  right: 0,
                   top: `${topPct}%`,
-                  height: "0.5px",
-                  background: "var(--earth-button-stroke, #8b6f47)",
                   opacity: baseOpacity,
                 }}
               />
@@ -79,20 +54,16 @@ const Background = ({ children }: PropsWithChildren) => {
             return (
               <div
                 key={`v-${leftPct}`}
+                className="absolute top-0 bottom-0 w-[0.5px] bg-[var(--brown-light)]"
                 style={{
-                  position: "absolute",
-                  top: 0,
-                  bottom: 0,
                   left: `${leftPct}%`,
-                  width: "0.5px",
-                  background: "var(--earth-button-stroke, #8b6f47)",
                   opacity: baseOpacity,
                 }}
               />
             );
           })}
         </div>
-        <div style={{ position: "relative", zIndex: 2 }}>{children}</div>
+        <div className="relative z-[2]">{children}</div>
       </div>
     </div>
   );

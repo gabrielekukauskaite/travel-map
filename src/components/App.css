@@ -5,9 +5,7 @@
   bottom: 0;
   left: 0;
   padding: 20px;
-  /* background-image: url("woodwallpaper.jpg"); */
-
-  --continent-stroke: #8b7355;
+  --continent-stroke: var(--brown-light);
 }
 
 figure {
@@ -18,37 +16,37 @@ figure {
 
 .outerBevel {
   /* of frame */
-  box-shadow: 4px 6px 12px 0 black;
+  box-shadow: 4px 6px 12px 0 var(--black);
   border-width: 5px;
   border-style: solid;
-  border-color: rgb(109, 84, 58) rgb(24, 19, 13) rgb(24, 19, 13)
-    rgb(109, 84, 58);
+  border-color: var(--brown-frame-bevel) var(--brown-frame-shadow)
+    var(--brown-frame-shadow) var(--brown-frame-bevel);
 }
 
 .flatSurface {
   /* of frame */
-  border: 12px solid rgb(65, 40, 16);
+  border: 12px solid var(--brown-frame-surface);
 }
 
 .innerBevel {
   /* of frame */
   border-width: 5px;
   border-style: solid;
-  border-color: rgb(24, 19, 13) rgb(109, 84, 58) rgb(109, 84, 58)
-    rgb(24, 19, 13);
+  border-color: var(--brown-frame-shadow) var(--brown-frame-bevel)
+    var(--brown-frame-bevel) var(--brown-frame-shadow);
 }
 
 .map {
-  background-color: rgb(255, 249, 224); /* Mat color */
+  background-color: var(--mat-color); /* Mat color */
   border-width: 3px; /* Gold edge of mat */
   border-style: solid;
-  border-color: rgb(207, 166, 0) rgb(207, 166, 0) rgb(145, 110, 0)
-    rgb(145, 110, 0);
+  border-color: var(--gold-edge) var(--gold-edge) var(--gold-dark)
+    var(--gold-dark);
 }
 
 /* Custom amber shades for book pages */
 .bg-amber-75 {
-  background-color: rgb(252, 246, 232);
+  background-color: var(--amber-75);
 }
 
 /* 3D transform utilities */
@@ -58,4 +56,48 @@ figure {
 
 .perspective-1000 {
   perspective: 1000px;
+}
+
+/* Hover popup styling */
+.photo-hover-popup .mapboxgl-popup-content {
+  padding: 0 !important;
+  box-shadow: 0 0 15px var(--shadow-dark);
+  animation: fadeIn 0.2s ease-in;
+}
+
+.photo-hover-popup {
+  animation: fadeIn 0.2s ease-in;
+}
+
+.photo-hover-popup.fade-out {
+  animation: fadeOut 0.2s ease-out forwards;
+}
+
+.photo-hover-popup .mapboxgl-popup-tip {
+  width: 13px;
+  height: 13px;
+  background: var(--background-light);
+  border: 1px solid black;
+  transform: rotate(45deg);
+  border-top: none;
+  border-left: none;
+  margin-top: -6px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }

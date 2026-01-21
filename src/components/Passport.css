@@ -45,8 +45,8 @@
   height: 95%;
   width: 65px;
   align-self: anchor-center;
-  border-left: 1px dashed gray;
-  border-right: 1px solid rgba(207, 166, 0, 0.767);
+  border-left: 1px dashed var(--gray);
+  border-right: 1px solid var(--gold-border-translucent);
 }
 
 /* Cover styling - vintage leather */
@@ -54,32 +54,32 @@
 .back {
   background: linear-gradient(
     135deg,
-    #5c4033 0%,
-    #6b4423 25%,
-    #4a352a 50%,
-    #6b4423 75%,
-    #5c4033 100%
+    var(--brown-medium) 0%,
+    var(--brown-medium) 25%,
+    var(--brown-dark) 50%,
+    var(--brown-medium) 75%,
+    var(--brown-medium) 100%
   );
-  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 20px var(--shadow-dark);
 }
 
 /* Page colors - vintage aged paper */
 .page1,
 .page6 {
-  background: #f4f1e8;
+  background: var(--page-1);
 }
 
 .page2,
 .page4 {
-  background: #f7f4ec;
+  background: var(--page-2);
 }
 
 .page5 {
-  background: #faf8f3;
+  background: var(--page-3);
 }
 
 .page6 {
-  background: #fcfaf7;
+  background: var(--page-4);
 }
 
 /* Closed state */
@@ -102,37 +102,37 @@
 
 .book.open .front {
   transform: rotateY(-180deg);
-  box-shadow: 0 1em 3em 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1em 3em 0 var(--shadow-medium);
 }
 
 .book.open .page1 {
   transform: rotateY(-170deg);
-  box-shadow: 0 1em 3em 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1em 3em 0 var(--shadow-medium);
 }
 
 .book.open .page2 {
   transform: rotateY(-160deg);
-  box-shadow: 0 1em 3em 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1em 3em 0 var(--shadow-medium);
 }
 
 .book.open .page3 {
   transform: rotateY(-150deg);
-  box-shadow: 0 1em 3em 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1em 3em 0 var(--shadow-medium);
 }
 
 .book.open .page4 {
   transform: rotateY(-30deg);
-  box-shadow: 0 1em 3em 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1em 3em 0 var(--shadow-medium);
 }
 
 .book.open .page5 {
   transform: rotateY(-20deg);
-  box-shadow: 0 1em 3em 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1em 3em 0 var(--shadow-medium);
 }
 
 .book.open .page6 {
   transform: rotateY(-1deg);
-  box-shadow: 0 1em 3em 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1em 3em 0 var(--shadow-medium);
 }
 
 /* .book.open .back {
@@ -147,22 +147,22 @@
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  color: #d4af37;
+  color: var(--gold-primary);
   font-family: "Times New Roman", serif;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  text-shadow: 1px 1px 2px var(--shadow-darker);
 }
 
 .globe-icon {
   font-size: 24px;
   margin-bottom: 4px;
-  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(1px 1px 2px var(--shadow-dark));
 }
 
 .passport-label {
   font-size: 10px;
   font-weight: bold;
   letter-spacing: 2px;
-  color: #d4af37;
+  color: var(--gold-primary);
 }
 
 /* Design 6: Retro Square with Corner Cuts */
@@ -173,8 +173,8 @@
   align-items: center;
   gap: 2px;
   padding: 4px;
-  background: #fafaf8;
-  border: 1.5px solid rgba(139, 69, 19, 0.5);
+  background: var(--page-5);
+  border: 1.5px solid var(--gold-border-dark);
   clip-path: polygon(
     3px 0,
     calc(100% - 3px) 0,
@@ -186,8 +186,8 @@
     0 3px
   );
   box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.2),
-    inset 0 0 2px rgba(139, 69, 19, 0.1);
+    0 1px 3px var(--shadow-medium),
+    inset 0 0 2px var(--gold-inset);
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -195,17 +195,21 @@
 .flag-stamp img {
   width: 16px;
   height: 12px;
-  border: 1px solid rgba(139, 69, 19, 0.4);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--gold-border-medium);
+  box-shadow: 0 1px 2px var(--shadow-light);
 }
 
 .flag-stamp span {
   font-size: 3.5px;
   font-weight: 800;
-  color: #6b4423;
+  color: var(--brown-dark-leather);
   text-transform: uppercase;
   letter-spacing: 0.4px;
-  background: linear-gradient(90deg, #6b4423 0%, #8b5a3c 100%);
+  background: linear-gradient(
+    90deg,
+    var(--brown-dark-leather) 0%,
+    var(--brown-warm) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
