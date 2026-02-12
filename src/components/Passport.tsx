@@ -117,8 +117,7 @@ const Passport = ({ map }: PassportProps) => {
         onClick={(e) => handlePageClick(e, 1)}
       >
         <div
-          className="flag-stamp"
-          style={{ top: "12%", right: "18%" }}
+          className="flag-stamp top-[12%] right-[18%]"
           onClick={(e) => handleStampClick(e, visitedCountries[6])}
         >
           <img
@@ -128,8 +127,7 @@ const Passport = ({ map }: PassportProps) => {
           <span>{visitedCountries[6]?.name}</span>
         </div>
         <div
-          className="flag-stamp"
-          style={{ top: "50%", left: "12%" }}
+          className="flag-stamp top-[50%] left-[12%]"
           onClick={(e) => handleStampClick(e, visitedCountries[7])}
         >
           <img
@@ -145,8 +143,7 @@ const Passport = ({ map }: PassportProps) => {
         onClick={(e) => handlePageClick(e, 2)}
       >
         <div
-          className="flag-stamp"
-          style={{ top: "20%", left: "20%" }}
+          className="flag-stamp top-[20%] left-[20%]"
           onClick={(e) => handleStampClick(e, visitedCountries[4])}
         >
           <img
@@ -156,8 +153,7 @@ const Passport = ({ map }: PassportProps) => {
           <span>{visitedCountries[4]?.name}</span>
         </div>
         <div
-          className="flag-stamp"
-          style={{ top: "55%", right: "15%" }}
+          className="flag-stamp top-[55%] right-[15%]"
           onClick={(e) => handleStampClick(e, visitedCountries[5])}
         >
           <img
@@ -183,8 +179,7 @@ const Passport = ({ map }: PassportProps) => {
         onClick={(e) => handlePageClick(e, 5)}
       >
         <div
-          className="flag-stamp"
-          style={{ top: "15%", right: "15%" }}
+          className="flag-stamp top-[15%] right-[15%]"
           onClick={(e) => handleStampClick(e, visitedCountries[2])}
         >
           <img
@@ -194,8 +189,7 @@ const Passport = ({ map }: PassportProps) => {
           <span>{visitedCountries[2]?.name}</span>
         </div>
         <div
-          className="flag-stamp"
-          style={{ top: "50%", left: "15%" }}
+          className="flag-stamp top-[50%] left-[15%]"
           onClick={(e) => handleStampClick(e, visitedCountries[3])}
         >
           <img
@@ -211,8 +205,7 @@ const Passport = ({ map }: PassportProps) => {
         onClick={(e) => handlePageClick(e, 6)}
       >
         <div
-          className="flag-stamp"
-          style={{ top: "10%", left: "15%" }}
+          className="flag-stamp top-[10%] left-[15%]"
           onClick={(e) => handleStampClick(e, visitedCountries[0])}
         >
           <img
@@ -222,8 +215,7 @@ const Passport = ({ map }: PassportProps) => {
           <span>{visitedCountries[0]?.name}</span>
         </div>
         <div
-          className="flag-stamp"
-          style={{ top: "45%", right: "20%" }}
+          className="flag-stamp top-[45%] right-[20%]"
           onClick={(e) => handleStampClick(e, visitedCountries[1])}
         >
           <img

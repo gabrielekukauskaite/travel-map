@@ -43,6 +43,7 @@ export default function EarthButton() {
       svgRef.current?.querySelectorAll("g").forEach((g) => {
         if (g !== continentGroup) g.style.filter = "";
       });
+      return;
     }
 
     continentGroup.style.filter = "brightness(1.2)";
@@ -66,23 +67,9 @@ export default function EarthButton() {
   const compassIcon = (
     <div
       onClick={isExpanded ? handleClose : () => setIsExpanded(true)}
-      style={{
-        width: "80px",
-        height: "80px",
-        cursor: "pointer",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        transition: "all 0.4s ease-in-out",
-      }}
+      className="w-20 h-20 cursor-pointer flex items-center justify-center transition-all duration-[400ms] ease-in-out"
     >
-      <CompassIcon
-        style={{
-          width: "100%",
-          height: "100%",
-          filter: "sepia(0.15) contrast(1.05)",
-        }}
-      />
+      <CompassIcon className="w-full h-full [filter:sepia(0.15)_contrast(1.05)]" />
     </div>
   );
 
@@ -91,13 +78,7 @@ export default function EarthButton() {
   }
 
   return (
-    <div
-      style={{
-        position: "relative",
-        width: "80px",
-        height: "80px",
-      }}
-    >
+    <div className="relative w-20 h-20">
       <style>{`
         @keyframes expandIn {
           from {
@@ -122,15 +103,11 @@ export default function EarthButton() {
       `}</style>
 
       <div
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          animation: isClosing
-            ? "collapseOut 0.4s ease-in-out forwards"
-            : "expandIn 0.4s ease-in-out",
-          transformOrigin: "bottom left",
-        }}
+        className={`absolute bottom-0 left-0 [transform-origin:bottom_left] ${
+          isClosing
+            ? "[animation:collapseOut_0.4s_ease-in-out_forwards]"
+            : "[animation:expandIn_0.4s_ease-in-out]"
+        }`}
       >
         <Background>
           <Label />
@@ -140,25 +117,13 @@ export default function EarthButton() {
             onClick={handleClick}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            style={{
-              width: "100%",
-              filter: "sepia(0.15) contrast(1.05)",
-            }}
+            className="w-full [filter:sepia(0.15)_contrast(1.05)]"
           />
         </Background>
       </div>
 
       {/* Compass icon in bottom left corner */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          zIndex: 10,
-        }}
-      >
-        {compassIcon}
-      </div>
+      <div className="absolute bottom-0 left-0 z-10">{compassIcon}</div>
     </div>
   );
 }

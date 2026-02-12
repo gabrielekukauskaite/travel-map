@@ -1,4 +1,3 @@
-import { or } from "firebase/firestore";
 import type { Photo } from "../types/photo";
 
 export const createGeoJson = (data: Photo[]): GeoJSON.FeatureCollection => ({

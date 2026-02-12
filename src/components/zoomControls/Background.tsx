@@ -2,22 +2,9 @@ import type { PropsWithChildren } from "react";
 
 const Background = ({ children }: PropsWithChildren) => {
   return (
-    <div
-      className="w-[350px] h-[260px] relative border border-solid shadow-[0_0_15px_var(--shadow-dark)]"
-      style={{
-        background: "var(--background-light)",
-      }}
-    >
+    <div className="w-[350px] h-[260px] relative border border-solid shadow-[0_0_15px_var(--shadow-dark)] bg-[var(--background-light)]">
       {/* Parchment background with gradient */}
-      <div
-        className="absolute top-[5px] left-[5px] right-[5px] bottom-[5px] border border-[var(--brown-light)] contrast-[1.1] brightness-[0.98]"
-        style={{
-          background:
-            "radial-gradient(circle at 50% 50%, var(--blue-light) 0%, var(--blue-medium) 50%, var(--blue-dark) 100%)",
-          backgroundSize: "130% 130%",
-          backgroundPosition: "center",
-        }}
-      >
+      <div className="absolute top-[5px] left-[5px] right-[5px] bottom-[5px] border border-[var(--brown-light)] contrast-[1.1] brightness-[0.98] bg-[radial-gradient(circle_at_50%_50%,var(--blue-light)_0%,var(--blue-medium)_50%,var(--blue-dark)_100%)] [background-size:130%_130%] [background-position:center]">
         {/* Noise overlay */}
         <div
           className="absolute inset-0 pointer-events-none z-0"
