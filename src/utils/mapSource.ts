@@ -8,7 +8,7 @@ const addSource = (map: Map, data: GeoJSON.FeatureCollection) => {
     type: "geojson",
     data,
     cluster: true,
-    clusterMaxZoom: 14,
+    clusterMaxZoom: 30,
     clusterRadius: 40,
     clusterProperties: {
       firstPhotoId: ["coalesce", ["get", "id"], ""],

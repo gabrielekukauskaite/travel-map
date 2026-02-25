@@ -1,5 +1,27 @@
 import type { Map } from "mapbox-gl";
-import { loadThumbnail } from "./loadThumbnail";
+import { loadThumbnail } from "../utils/loadThumbnail";
+
+export function createThrottledThumbnailUpdater(map: Map) {
+  let throttleTimeoutId: number | null = null;
+
+  const update = () => {
+    if (throttleTimeoutId) return;
+
+    updateFeatureThumbnail(map);
+    throttleTimeoutId = window.setTimeout(() => {
+      throttleTimeoutId = null;
+    }, 500);
+  };
+
+  const dispose = () => {
+    if (throttleTimeoutId) {
+      clearTimeout(throttleTimeoutId);
+      throttleTimeoutId = null;
+    }
+  };
+
+  return { update, dispose };
+}
 
 export const updateFeatureThumbnail = (map: Map) => {
   const unclusteredPoints = map.queryRenderedFeatures({

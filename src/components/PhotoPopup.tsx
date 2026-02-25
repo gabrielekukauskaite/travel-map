@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import type { Photo } from "../types/photo";
-import PhotoCard from "./PhotoCard";
+import PhotoCard from "./photoCard/PhotoCard";
 
 interface PhotoPopupProps {
   photo: Photo;

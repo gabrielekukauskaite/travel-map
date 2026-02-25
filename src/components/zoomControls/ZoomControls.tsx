@@ -13,7 +13,7 @@ const CONTINENT_COORDS: Record<string, [number, number, number]> = {
   "south-america": [-60, -15, 3.2],
 };
 
-export default function EarthButton() {
+export default function ZoomControls() {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
@@ -67,7 +67,7 @@ export default function EarthButton() {
   const compassIcon = (
     <div
       onClick={isExpanded ? handleClose : () => setIsExpanded(true)}
-      className="w-20 h-20 cursor-pointer flex items-center justify-center transition-all duration-[400ms] ease-in-out"
+      className="w-16 h-16 sm:w-20 sm:h-20 cursor-pointer flex items-center justify-center transition-all duration-[400ms] ease-in-out"
     >
       <CompassIcon className="w-full h-full [filter:sepia(0.15)_contrast(1.05)]" />
     </div>
@@ -78,7 +78,7 @@ export default function EarthButton() {
   }
 
   return (
-    <div className="relative w-20 h-20">
+    <div className="relative w-16 h-16 sm:w-20 sm:h-20">
       <style>{`
         @keyframes expandIn {
           from {

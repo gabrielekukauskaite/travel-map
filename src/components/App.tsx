@@ -1,11 +1,12 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./App.css";
 import { useRef, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import Nameplate from "./Nameplate";
-import ZoomControls from "./zoomControls/ZoomControls";
 import ExpandedPhotoView from "./ExpandedPhotoView";
 import type { Photo } from "../types/photo";
 import { usePhotosMap } from "../hooks/usePhotosMap";
+import { isMobile } from "react-device-detect";
 
 const App = () => {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -13,35 +14,24 @@ const App = () => {
   const [expandedPhoto, setExpandedPhoto] = useState<Photo | null>(null);
   const [clusterPhotos, setClusterPhotos] = useState<Photo[]>([]);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
-  const [isPhotoAnimating, setIsPhotoAnimating] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
   const [popupStartPosition, setPopupStartPosition] = useState<{
     top: number;
     left: number;
   } | null>(null);
 
-  usePhotosMap({
+  const { longPressHandlers } = usePhotosMap({
     mapContainerRef,
     setExpandedPhoto,
     setClusterPhotos,
     setCurrentPhotoIndex,
-    setIsPhotoAnimating,
     setPopupStartPosition,
   });
 
   const handleCloseExpandedPhoto = () => {
-    // Trigger fade out animation
-    setIsClosing(true);
-
-    // Wait for animation to complete before removing
-    setTimeout(() => {
-      setExpandedPhoto(null);
-      setClusterPhotos([]);
-      setCurrentPhotoIndex(0);
-      setIsPhotoAnimating(false);
-      setIsClosing(false);
-      setPopupStartPosition(null);
-    }, 300); // Faster fade out
+    setExpandedPhoto(null);
+    setClusterPhotos([]);
+    setCurrentPhotoIndex(0);
+    setPopupStartPosition(null);
   };
 
   const handlePhotoIndexChange = (index: number) => {
@@ -53,33 +43,37 @@ const App = () => {
   };
 
   return (
-    <div className="h-full w-full p-2 sm:p-5">
+    <div className="h-full w-full p-0 sm:p-5">
       <Nameplate />
 
       {/* Expanded photo overlay */}
-      {expandedPhoto && (
-        <ExpandedPhotoView
-          photo={expandedPhoto}
-          isAnimating={isPhotoAnimating}
-          isClosing={isClosing}
-          startPosition={popupStartPosition}
-          clusterPhotos={clusterPhotos}
-          currentIndex={currentPhotoIndex}
-          onClose={handleCloseExpandedPhoto}
-          onIndexChange={handlePhotoIndexChange}
-        />
-      )}
+      <AnimatePresence>
+        {expandedPhoto && (
+          <ExpandedPhotoView
+            photo={expandedPhoto}
+            startPosition={popupStartPosition}
+            clusterPhotos={clusterPhotos}
+            currentIndex={currentPhotoIndex}
+            onClose={handleCloseExpandedPhoto}
+            onIndexChange={handlePhotoIndexChange}
+          />
+        )}
+      </AnimatePresence>
 
       <div className="h-full outerBevel">
         <div className="h-full flatSurface">
           <div className="h-full innerBevel">
-            <div className="w-full h-full map" ref={mapContainerRef} />
+            <div
+              className="w-full h-full map"
+              ref={mapContainerRef}
+              {...(isMobile ? longPressHandlers : {})}
+            />
           </div>
         </div>
 
-        <div className="absolute bottom-15 left-15 z-50">
+        {/* <div className="absolute bottom-8 sm:bottom-15 left-8 sm:left-15 z-50">
           <ZoomControls />
-        </div>
+        </div> */}
 
         {/* <div className="absolute bottom-12 right-12 z-50">
           <Book map={map} />

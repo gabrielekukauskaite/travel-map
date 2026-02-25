@@ -7,6 +7,13 @@
   --continent-stroke: var(--brown-light);
 }
 
+/* Force Mapbox GL JS DOM UI (controls/popup/attribution) to use the app font.
+   Note: map label text is rendered to the WebGL canvas and is controlled by the style's `text-font`, not CSS. */
+.mapboxgl-map,
+.mapboxgl-map * {
+  font-family: inherit;
+}
+
 figure {
   width: 545px;
   height: 500px;
@@ -75,12 +82,13 @@ figure {
 .photo-hover-popup .mapboxgl-popup-tip {
   width: 13px;
   height: 13px;
-  background: var(--background-light);
-  border: 1px solid black;
+  background: transparent;
+  border: 2px solid var(--brown-dark);
   transform: rotate(45deg);
   border-top: none;
   border-left: none;
   margin-top: -6px;
+  box-shadow: none;
 }
 
 @keyframes fadeIn {

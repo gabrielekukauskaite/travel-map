@@ -1,11 +1,12 @@
-import PhotoCard from "./PhotoCard";
-import { useEffect, useState } from "react";
+import PhotoNavigationControls from "./PhotoNavigationControls";
+import { useEffect, useState, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import type { Photo } from "../types/photo";
+import { isMobile } from "react-device-detect";
+import PostcardFrame from "./photoCard/PostcardFrame";
 
 interface ExpandedPhotoViewProps {
   photo: Photo;
-  isAnimating: boolean;
-  isClosing: boolean;
   startPosition: { top: number; left: number } | null;
   clusterPhotos: Photo[];
   currentIndex: number;
@@ -15,22 +16,26 @@ interface ExpandedPhotoViewProps {
 
 const ExpandedPhotoView = ({
   photo,
-  isClosing,
+  startPosition,
   clusterPhotos,
   currentIndex,
   onClose,
   onIndexChange,
 }: ExpandedPhotoViewProps) => {
   const slides = clusterPhotos.length > 0 ? clusterPhotos : [photo];
-  const clampedIndex =
-    slides.length <= 1
-      ? 0
-      : Math.max(0, Math.min(currentIndex, slides.length - 1));
+  const clampedIndex = Math.max(0, Math.min(currentIndex, slides.length - 1));
   const currentPhoto = slides[clampedIndex] ?? photo;
 
   const [displayedPhoto, setDisplayedPhoto] = useState<Photo>(currentPhoto);
+  const [direction, setDirection] = useState<"prev" | "next" | null>(null);
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
     if (displayedPhoto.url === currentPhoto.url) return;
 
     let cancelled = false;
@@ -54,78 +59,97 @@ const ExpandedPhotoView = ({
     };
   }, [currentPhoto, displayedPhoto.url]);
 
-  const handlePrev = () => {
+  const handleNavigate = (dir: "prev" | "next") => {
     if (!onIndexChange) return;
-    if (clampedIndex <= 0) return;
-    onIndexChange(clampedIndex - 1);
+    setDirection(dir);
+    const newIndex = dir === "prev" ? clampedIndex - 1 : clampedIndex + 1;
+    if (newIndex >= 0 && newIndex < slides.length) {
+      onIndexChange(newIndex);
+    }
   };
 
-  const handleNext = () => {
-    if (!onIndexChange) return;
-    if (clampedIndex >= slides.length - 1) return;
-    onIndexChange(clampedIndex + 1);
+  // Calculate initial position offset from center
+  const initialPos = startPosition
+    ? {
+        x: startPosition.left - window.innerWidth / 2,
+        y: startPosition.top - window.innerHeight / 2,
+      }
+    : { x: 0, y: 0 };
+
+  // Slide animation variants
+  const slideVariants = {
+    enter: (direction: "prev" | "next" | null) => ({
+      x: direction === "prev" ? -100 : direction === "next" ? 100 : 0,
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction: "prev" | "next" | null) => ({
+      x: direction === "prev" ? 100 : direction === "next" ? -100 : 0,
+      opacity: 0,
+    }),
   };
 
   return (
     <>
-      <div
-        className={`fixed inset-0 z-[100] bg-black/50 transition-opacity duration-300 ${
-          isClosing ? "opacity-0" : "opacity-100"
-        }`}
+      <motion.div
+        className="fixed inset-0 z-[100] bg-black/50"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
         onClick={onClose}
       />
 
-      <div
-        className={`fixed z-[101] pointer-events-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 ${
-          isClosing ? "opacity-0" : "opacity-100"
-        }`}
+      <motion.div
+        className="fixed z-[101] pointer-events-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+        initial={{
+          x: initialPos.x,
+          y: initialPos.y,
+          scale: startPosition ? 0.5 : 0.9,
+          opacity: startPosition ? 1 : 0,
+        }}
+        animate={{ x: 0, y: 0, scale: 1, opacity: 1 }}
+        exit={{ scale: 0.95, opacity: 0 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
       >
-        <div className="relative">
-          <div
-            className="pointer-events-auto"
-            onClick={(e) => e.stopPropagation()}
+        <AnimatePresence mode="wait" custom={direction}>
+          <motion.div
+            key={displayedPhoto.id}
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.25, ease: "easeInOut" }}
           >
-            <PhotoCard
-              photo={displayedPhoto}
-              expanded
-              animateSize={false}
-              onImageClick={onClose}
-            />
-          </div>
-        </div>
-      </div>
+            {/* Single postcard containing photo and info */}
+            <PostcardFrame>
+              <img
+                src={displayedPhoto.url}
+                alt={displayedPhoto.title || "Photo"}
+                className="block select-none border-2 border-[var(--brown-medium)] max-w-[80vw] max-h-[80vh] sm:max-w-[min(70vw,750px)] sm:max-h-[min(70vh,750px)]"
+                onClick={isMobile ? undefined : onClose}
+                onContextMenu={(e) => e.preventDefault()}
+                draggable={false}
+              />
+              {/* <PhotoStamp
+                title={displayedPhoto.title}
+                date={displayedPhoto.date}
+              /> */}
+            </PostcardFrame>
+          </motion.div>
+        </AnimatePresence>
+      </motion.div>
 
       {slides.length > 1 && (
-        <div
-          className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[102] pointer-events-auto transition-opacity duration-300 ${
-            isClosing ? "opacity-0" : "opacity-100"
-          }`}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="flex items-center gap-3">
-            {clampedIndex > 0 && (
-              <button
-                className="rounded-md w-10 h-10 flex items-center justify-center transition-all border-2 font-serif text-2xl font-bold bg-[linear-gradient(180deg,var(--parchment-light)_0%,var(--parchment-mid)_100%)] border-[var(--brown-medium)] text-[var(--brown-dark)] shadow-[0_4px_8px_var(--shadow-dark),inset_0_1px_0_var(--white-highlight)] [text-shadow:0_1px_1px_var(--white-highlight-medium)]"
-                onClick={handlePrev}
-              >
-                ‹
-              </button>
-            )}
-
-            <div className="rounded-md px-4 py-2 border-2 font-serif text-sm font-semibold bg-[linear-gradient(180deg,var(--parchment-light)_0%,var(--parchment-mid)_100%)] border-[var(--brown-medium)] text-[var(--brown-dark)] shadow-[0_4px_8px_var(--shadow-dark),inset_0_1px_0_var(--white-highlight)] [text-shadow:0_1px_1px_var(--white-highlight-medium)]">
-              {clampedIndex + 1} / {slides.length}
-            </div>
-
-            {clampedIndex < slides.length - 1 && (
-              <button
-                className="rounded-md w-10 h-10 flex items-center justify-center transition-all border-2 font-serif text-2xl font-bold bg-[linear-gradient(180deg,var(--parchment-light)_0%,var(--parchment-mid)_100%)] border-[var(--brown-medium)] text-[var(--brown-dark)] shadow-[0_4px_8px_var(--shadow-dark),inset_0_1px_0_var(--white-highlight)] [text-shadow:0_1px_1px_var(--white-highlight-medium)]"
-                onClick={handleNext}
-              >
-                ›
-              </button>
-            )}
-          </div>
-        </div>
+        <PhotoNavigationControls
+          currentIndex={clampedIndex}
+          totalCount={slides.length}
+          onNavigate={handleNavigate}
+        />
       )}
     </>
   );
