@@ -28,6 +28,7 @@ const ExpandedPhotoView = ({
 
   const [displayedPhoto, setDisplayedPhoto] = useState<Photo>(currentPhoto);
   const [direction, setDirection] = useState<"prev" | "next" | null>(null);
+  const [imageLoaded, setImageLoaded] = useState(true);
   const isInitialMount = useRef(true);
 
   useEffect(() => {
@@ -38,25 +39,14 @@ const ExpandedPhotoView = ({
 
     if (displayedPhoto.url === currentPhoto.url) return;
 
-    let cancelled = false;
+    // Immediately update the displayed photo to trigger the slide animation,
+    // then check if the image is already cached or needs loading.
+    setDisplayedPhoto(currentPhoto);
+
     const img = new Image();
-    img.onload = () => {
-      if (cancelled) return;
-      setDisplayedPhoto(currentPhoto);
-    };
-    img.onerror = () => {
-      if (cancelled) return;
-      setDisplayedPhoto(currentPhoto);
-    };
     img.src = currentPhoto.url;
-
-    if (img.complete) {
-      setDisplayedPhoto(currentPhoto);
-    }
-
-    return () => {
-      cancelled = true;
-    };
+    // img.complete is true if the image is already cached by the browser
+    setImageLoaded(img.complete);
   }, [currentPhoto, displayedPhoto.url]);
 
   const handleNavigate = (dir: "prev" | "next") => {
@@ -127,14 +117,26 @@ const ExpandedPhotoView = ({
           >
             {/* Single postcard containing photo and info */}
             <PostcardFrame>
-              <img
-                src={displayedPhoto.url}
-                alt={displayedPhoto.title || "Photo"}
-                className="block select-none border-2 border-[var(--brown-medium)] max-w-[80vw] max-h-[80vh] sm:max-w-[min(70vw,750px)] sm:max-h-[min(70vh,750px)]"
-                onClick={isMobile ? undefined : onClose}
-                onContextMenu={(e) => e.preventDefault()}
-                draggable={false}
-              />
+              <div className="relative">
+                <img
+                  src={displayedPhoto.url}
+                  alt={displayedPhoto.title || "Photo"}
+                  width={displayedPhoto.orientation === "portrait" ? 500 : 750}
+                  height={displayedPhoto.orientation === "portrait" ? 750 : 500}
+                  className="block select-none border-2 border-[var(--brown-medium)] max-w-[80vw] max-h-[80vh] sm:max-w-[min(70vw,750px)] sm:max-h-[min(70vh,750px)]"
+                  style={{ visibility: imageLoaded ? "visible" : "hidden" }}
+                  onClick={isMobile ? undefined : onClose}
+                  onContextMenu={(e) => e.preventDefault()}
+                  onLoad={() => setImageLoaded(true)}
+                  onError={() => setImageLoaded(true)}
+                  draggable={false}
+                />
+                {!imageLoaded && (
+                  <div className="absolute inset-0 bg-[var(--parchment-light)] flex items-center justify-center">
+                    <div className="w-8 h-8 border-4 border-[var(--brown-medium)] border-t-transparent rounded-full animate-spin" />
+                  </div>
+                )}
+              </div>
               {/* <PhotoStamp
                 title={displayedPhoto.title}
                 date={displayedPhoto.date}

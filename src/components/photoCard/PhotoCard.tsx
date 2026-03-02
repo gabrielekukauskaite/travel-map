@@ -1,7 +1,6 @@
 import { useState } from "react";
 import type { Photo } from "../../types/photo";
 import PostcardFrame from "./PostcardFrame";
-import PhotoStamp from "./PhotoStamp";
 
 interface PhotoCardProps {
   photo: Photo;
@@ -11,7 +10,7 @@ interface PhotoCardProps {
 }
 
 const PhotoCard = ({
-  photo: { url, title, date },
+  photo: { url, title },
   expanded,
   hasMultiplePhotos = false,
   onImageClick,
